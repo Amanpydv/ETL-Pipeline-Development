@@ -13,7 +13,7 @@ def load_data(file_path):
         data = pd.read_csv(file_path)
 
         # Log data for debugging
-        print("\n",data)
+        #print("\n",data)
 
         # Validate columns based on file type
         if 'sales_data.csv' in file_path:
@@ -49,4 +49,17 @@ customer_df = None
 for file in files:
     df = load_data(file)
     if df is not None:
-        print(f"\n File Loaded and Validated Successfully: {file}\n")
+        #print(f"\n File Loaded and Validated Successfully: {file}\n")
+        if file == 'sales_data.csv':
+            sales_df = df
+            sales_df['order_date']= pd.to_datetime(sales_df['order_date'],errors='coerce').dt.date #converting order_date in sales table to datetime format
+            sales_df['order_id'] = pd.to_numeric(sales_df['order_id'], errors='coerce')
+            sales_df['customer_id'] = pd.to_numeric(sales_df['customer_id'], errors='coerce')
+            sales_df_clean = sales_df.dropna(subset=['order_id', 'customer_id']) #Remove any invalid customer id and order id
+            print("\n Successfully Formatted Order_Date and Checked for any invalid customer and order id: \n\n",sales_df)
+        if file== 'customer_data.csv':
+            customer_df = df
+            customer_df['signup_date'] = pd.to_datetime(customer_df['signup_date'], errors='coerce').dt.date #converting signup_date in customer table to datetime format
+            customer_df['customer_id'] = pd.to_numeric(customer_df['customer_id'], errors='coerce')
+            customer_df_clean = customer_df.dropna(subset=['customer_id']) #Remove any invalid customer id
+            print("\n Successfully Formatted Signup_Date and Checked for any invalid customer id: \n\n",customer_df)
