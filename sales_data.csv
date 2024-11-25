@@ -1,4 +1,4 @@
-﻿order_id,customer_id,product,quantity,price,order_data
+﻿order_id,customer_id,product,quantity,price,order_date
 1,1001,Widget A,2,19.99,2024-01-15 10:00
 2,1002,Widget B,1,29.99,2024-01-16 11:00
 3,1003,Widget A,1,19.99,2024-01-16 12:00
