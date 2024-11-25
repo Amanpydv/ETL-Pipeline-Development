@@ -61,7 +61,7 @@ for file in files:
             #print("\nTables after data enrichment \n\n",sales_df)
             sales_df = sales_df[sales_df['quantity'] > 0].copy() #excluding quantity with 0 or less
             sales_df['order_type'] = np.where(sales_df['total_value'] > 1000, 'High-Value Order', 'Regular Order') #Marking any total_value above 1000 as high order and rest as regular order
-            print("\n Sales Data Table after Business rule\n\n",sales_df)
+            #print("\n Sales Data Table after Business rule\n\n",sales_df)
         if file== 'customer_data.csv':
             customer_df = df
             customer_df['signup_date'] = pd.to_datetime(customer_df['signup_date'], errors='coerce').dt.date #converting signup_date in customer table to datetime format
@@ -71,10 +71,16 @@ for file in files:
             customer_df['signup_date'] = pd.to_datetime(customer_df['signup_date'])
             current_date = pd.to_datetime(datetime.now().date())
             customer_df['customer_tenure'] = (current_date - customer_df['signup_date']).dt.days
-            print("\nCustomer Data after Business rule\n\n",customer_df)
+            #print("\nCustomer Data after Business rule\n\n",customer_df)
 
 #Join the sales data with customer data on customer_id to enrich the sales table with customer_name and email.            
 if sales_df is not None and customer_df is not None:
     enriched_sales_df = pd.merge(sales_df, customer_df[['customer_id', 'customer_name', 'email']], 
                                  on='customer_id', how='left')
     #print("\nEnriched Sales_df\n\n",enriched_sales_df)
+    #Summary table with total sales and per product and order count
+    summary_table = enriched_sales_df.groupby('product').agg(
+        total_sales = ('total_value','sum'),
+        order_count = ('order_id','count')
+        ).reset_index()
+    print("\nSummary table with total sales per product and order counts:\n\n",summary_table)
