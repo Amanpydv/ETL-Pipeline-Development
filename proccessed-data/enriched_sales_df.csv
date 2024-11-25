@@ -1,0 +1,5 @@
+order_id,customer_id,product,quantity,price,order_date,total_value,order_type,customer_name,email
+1,1001,Widget A,2,19.99,2024-01-15,39.98,Regular Order,John Doe,john.doe@example.com
+2,1002,Widget B,1,29.99,2024-01-16,29.99,Regular Order,Jane Smith,jane.smith@example.com
+3,1003,Widget A,1,19.99,2024-01-16,19.99,Regular Order,Alice Johnson,alice.j@example.com
+5,1005,Widget B,3,29.99,,89.97,Regular Order,Charlie White,charlie.w@example.com

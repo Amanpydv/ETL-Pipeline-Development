@@ -83,4 +83,24 @@ if sales_df is not None and customer_df is not None:
         total_sales = ('total_value','sum'),
         order_count = ('order_id','count')
         ).reset_index()
-    print("\nSummary table with total sales per product and order counts:\n\n",summary_table)
+    #print("\nSummary table with total sales per product and order counts:\n\n",summary_table)
+ 
+# File paths and corresponding DataFrames
+file_paths_and_dataframes = {
+    "proccessed-data/transformed_customer_data.csv": customer_df,
+    "proccessed-data/transformed_sales_data.csv": sales_df,
+    "proccessed-data/summary_table.csv": summary_table,
+    "proccessed-data/enriched_sales_df.csv": enriched_sales_df,
+}
+
+# Attempt to save each DataFrame to its respective file
+try:
+    for file_path, dataframe in file_paths_and_dataframes.items():
+        try:
+            dataframe.to_csv(file_path, index=False)  # Exclude index column
+        except Exception as e:
+            print(f"Error saving data to {file_path}: {e}")
+    print("All files processed successfully, if no errors were reported above.")
+except Exception as e:
+    print(f"An unexpected error occurred during file processing: {e}")
+
