@@ -1,6 +1,10 @@
+import json
 import pandas as pd
 import numpy as np
 from datetime import datetime
+
+with open('config.json', 'r') as config_file:
+    config = json.load(config_file)
 
 # Define required columns for sales and customer data
 required_sales_columns = ['order_id', 'customer_id', 'quantity', 'order_date']
@@ -9,7 +13,7 @@ required_customer_columns = ['customer_id', 'customer_name', 'email', 'signup_da
 # Load the CSV data into Pandas DataFrames
 def load_data(file_path):
     try:
-        # Load the data into a DataFrame
+        # Load the ata into a DataFrame
         data = pd.read_csv(file_path)
 
         # Log data for debugging
@@ -40,7 +44,9 @@ def load_data(file_path):
     return None
 
 # List of files to process
-files = ['sales_data.csv', 'customer_data.csv']
+sales_file = config["input_files"]["sales_data"]
+customer_file = config["input_files"]["customer_data"]
+files = [sales_file, customer_file]
 
 sales_df = None
 customer_df = None
@@ -87,10 +93,10 @@ if sales_df is not None and customer_df is not None:
  
 # File paths and corresponding DataFrames
 file_paths_and_dataframes = {
-    "proccessed-data/transformed_customer_data.csv": customer_df,
-    "proccessed-data/transformed_sales_data.csv": sales_df,
-    "proccessed-data/summary_table.csv": summary_table,
-    "proccessed-data/enriched_sales_df.csv": enriched_sales_df,
+    config["output_files"]["transformed_customer_data"]: customer_df,
+    config["output_files"]["transformed_sales_data"]: sales_df,
+    config["output_files"]["summary_table"]: summary_table,
+    config["output_files"]["enriched_sales_data"]: enriched_sales_df,
 }
 
 # Attempt to save each DataFrame to its respective file

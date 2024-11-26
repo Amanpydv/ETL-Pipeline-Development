@@ -1,23 +1,24 @@
 import psycopg2
 from psycopg2 import sql
+import json
+import os
+from dotenv import load_dotenv
 
-# Database connection details
-db_config = {
-    'dbname': 'sales_db',
-    'user': 'postgres',
-    'password': '1507',
-    'host': 'localhost',
-    'port': '5432'
-}
+# Load environment variables (e.g., DB credentials) from a .env file
+load_dotenv()
 
-# File paths for CSVs
-files = {
-    'sales_summary': '/private/tmp/summary_table.csv',
-    'sales_data': '/private/tmp/transformed_sales_data.csv',
-    'customer_data': '/private/tmp/transformed_customer_data.csv',
-    'sales_enriched_data': '/private/tmp/enriched_sales_df.csv'
-}
+# Load configuration from config.json
+with open('config.json', 'r') as config_file:
+    config = json.load(config_file)
 
+# Extract database configuration from the JSON file
+db_config = config['database']
+db_connection_string = f"postgresql://{db_config['username']}:{db_config['password']}@{db_config['host']}:{db_config['port']}/{db_config['database_name']}"
+
+# File paths for CSVs (loaded from config.json)
+files = config['file_paths']
+
+# Function to copy data into PostgreSQL using the COPY command
 def copy_data(cursor, table_name, file_path):
     try:
         # Execute the COPY command
@@ -42,8 +43,8 @@ def copy_data(cursor, table_name, file_path):
 
 def main():
     try:
-        # Connect to the database
-        conn = psycopg2.connect(**db_config)
+        # Connect to the database using the connection string
+        conn = psycopg2.connect(db_connection_string)
         conn.autocommit = True
         cursor = conn.cursor()
         

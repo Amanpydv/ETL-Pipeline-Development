@@ -62,3 +62,8 @@ COPY sales_enriched_data FROM '/private/tmp/enriched_sales_df.csv'
 DELIMITER ',' 
 CSV HEADER
 ENCODING 'UTF8';
+
+SELECT * FROM sales_data;
+SELECT * FROM customer_data;
+SELECT * FROM sales_summary;
+SELECT * FROM sales_enriched_data;
